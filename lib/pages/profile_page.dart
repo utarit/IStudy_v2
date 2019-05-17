@@ -14,8 +14,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return Scaffold(
       appBar: AppBar(title: Text("Profile Page")),
-      body: ScopedModelDescendant<MainModel>(
-          builder: (builder, child, model) {
+      body: ScopedModelDescendant<MainModel>(builder: (builder, child, model) {
         return Column(
           children: <Widget>[
             Stack(
@@ -67,7 +66,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
                     title: Text(model.sessionList[index].day),
-                    subtitle: Text("${model.sessionList[index].duration.toString()} min"),
+                    trailing: Text(
+                      "${model.sessionList[index].duration.toString()} min",
+                      style: TextStyle(),
+                    ),
                   );
                 },
                 itemCount: model.sessionList.length,
