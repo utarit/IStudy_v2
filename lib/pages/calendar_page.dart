@@ -6,10 +6,10 @@ import '../scoped_models/mainModel.dart';
 
 class CalendarPage extends StatelessWidget {
   Color _colorPicker(int difference) {
-    if (difference == 0) {
+    if (difference < 0) {
+      return Colors.black26; 
+    } else if (difference < 2) {
       return Colors.red;
-    } else if (difference < 0) {
-      return Colors.black26;
     } else if (difference < 8) {
       return Colors.amber;
     } else {
@@ -24,6 +24,14 @@ class CalendarPage extends StatelessWidget {
       return "$difference days left";
     } else {
       return "You are on Fire!";
+    }
+  }
+
+  String _numberFormat(int number){
+    if(number < 10){
+      return "0$number";
+    } else {
+      return "$number";
     }
   }
 
@@ -54,7 +62,11 @@ class CalendarPage extends StatelessWidget {
               itemCount: model.deadlineList.length,
               itemBuilder: (BuildContext context, int index) {
                 DateTime date = model.deadlineList[index].deadlineTime;
-                final difference = date.difference(DateTime.now()).inDays;
+                int difference = date.difference(DateTime.now()).inDays;
+
+                if(!(date.day == DateTime.now().day && date.month == DateTime.now().month) && difference >= 0){
+                  difference++;
+                }
 
                 return Dismissible(
                   onDismissed: (DismissDirection direction) {
@@ -67,7 +79,7 @@ class CalendarPage extends StatelessWidget {
                   ),
                   child: ListTile(
                     title: Text(model.deadlineList[index].deadlineName),
-                    subtitle: Text("${date.day}/${date.month}/${date.year}"),
+                    subtitle: Text("${_numberFormat(date.day)}/${_numberFormat(date.month)}/${date.year}"),
                     trailing: Text(
                       _textPicker(difference),
                       style: TextStyle(

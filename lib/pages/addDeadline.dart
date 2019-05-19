@@ -7,14 +7,14 @@ class AddDeadline extends StatefulWidget {
 
 class _AddDeadlineState extends State<AddDeadline> {
   DateTime selectedDate = DateTime.now();
-  String deadlineName = "";
+  TextEditingController controller = TextEditingController();
+  bool _validate = false;
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        builder: (BuildContext context, Widget child) => SingleChildScrollView(
-          child: child
-        ),
+        builder: (BuildContext context, Widget child) =>
+            SingleChildScrollView(child: child),
         initialDate: selectedDate,
         firstDate: DateTime(2019),
         lastDate: DateTime(2100));
@@ -36,12 +36,13 @@ class _AddDeadlineState extends State<AddDeadline> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             TextField(
-              onChanged: (String str) {
-                setState(() {
-                  deadlineName = str;
-                });
-              },
-            ),
+                controller: controller,
+                decoration: InputDecoration(
+                  labelText: 'Enter the Deadline',
+                  errorText: _validate
+                      ? 'Deadline\'s length should be between 1 and 30'
+                      : null,
+                )),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -54,15 +55,24 @@ class _AddDeadlineState extends State<AddDeadline> {
               ],
             ),
             RaisedButton(
-                  child: Text("Submit this"),
-                  onPressed: () {
-                    Map<String, dynamic> data = {
-                      'deadlineName': deadlineName,
-                      'deadlineDate': selectedDate
-                    };
-                    Navigator.pop(context, data);
-                  },
-                ),
+              child: Text("Submit this"),
+              onPressed: () {
+                if (!(controller.text.length > 0 && controller.text.length < 31)) {
+                  setState(() {
+                    _validate = true;
+                  });
+                } else {
+                  setState(() {
+                    _validate = false; 
+                  });
+                  Map<String, dynamic> data = {
+                    'deadlineName': controller.text,
+                    'deadlineDate': selectedDate
+                  };
+                  Navigator.pop(context, data);
+                }
+              },
+            ),
           ],
         ),
       ),
