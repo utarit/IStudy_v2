@@ -1,8 +1,6 @@
-# i_study
+# i_study_v2
 
-A new Flutter application.
+This is the new version of i_study app. It uses Flutter SDK. It's still under development.
 
-## Getting Started
+The previous version can be found at https://github.com/utarit/IStudy
 
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
